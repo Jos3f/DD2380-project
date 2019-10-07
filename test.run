@@ -1,0 +1,22 @@
+# Floortile problem
+# 1 robot, 1D
+
+reset;
+model test.mod;
+data test.dat;
+
+option solver ilogcp;
+printf "\n** Before solve **\n\n";
+solve;
+
+printf "\n** Results**\n\n", n;
+display y;
+display stock0;
+display stock1;
+display color;
+display move;
+display paint;
+display switch;
+display cell;
+display _ampl_elapsed_time;
+printf "\n ** For 1D floortile, with %g cells and 1 robot : *"
