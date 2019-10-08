@@ -59,9 +59,10 @@ minimize objective: tstar;
 
 #Goal state
 subject to TotalSatisfaction:
-#exists{t in 1..T} (sum{c in 1..nr_children} (satisfaction_children[c,t]) = nr_children and t = tstar);
-exists{t in 1..T} pos_tray[2, t] = 2 and on_tray[2, t] = 1 and
-on_tray[1, t] = 1 and pos_tray[1, t] = 2 and satisfaction_children[1, t] = 1 and t = tstar;
+exists{t in 1..T} (sum{c in 1..nr_children} (satisfaction_children[c,t]) = nr_children and t = tstar);
+#exists{t in 1..T} pos_tray[2, t] = 2 and on_tray[2, t] = 1 and
+#on_tray[1, t] = 1 and pos_tray[1, t] = 2 and satisfaction_children[1, t] = 1 and 
+#satisfaction_children[2, t] = 1 and t = tstar;
 
 # Max one action each time step
 subject to OneAction {t in 1..T-1}:
@@ -278,19 +279,24 @@ move_tray[t] = 1 ==> pos_tray[i, t+1] <= nr_places;
 # Serve 
 subject to ServeSandwich {t in 1..T-1}:
 serve[t] = 1 ==>
-exists{i in 1..nr_trays, c in 1..nr_children} (on_tray[i,t+1] - on_tray[i,t] = -1  and child_pos[c] = pos_tray[i,t] and 
+exists{i in 1..nr_trays, c in 1..nr_children} (on_tray[i,t+1] = on_tray[i,t] - 1  and child_pos[c] = pos_tray[i,t] and 
 satisfaction_children[c,t+1] = satisfaction_children[c,t] + 1 and health_status[c] = 0 # only serve this to nonallergic children
 and forall {j in 1..nr_trays diff {i}} (on_tray[j,t+1] = on_tray[j,t]) #only reduce one tray
 and forall {c2 in 1..nr_children diff {c}} (satisfaction_children[c2,t+1] = satisfaction_children[c2,t])); #only feed one child   
 
 
 subject to ReduceSandwichOnTrayExcessiveSandwich {i in 1..nr_trays, t in 1..T-1}:
-serve[t] = 1 and on_tray[i,t] - on_tray_non_gluten[i,t] > 0 and on_tray[i,t+1] - on_tray[i,t] = -1 ==> 
+serve[t] = 1 and on_tray[i,t] - on_tray_non_gluten[i,t] > 0 ==> 
 on_tray_non_gluten[i,t+1] = on_tray_non_gluten[i,t];
 
 subject to ReduceSandwichOnTrayOnlyGlutenSandwich {i in 1..nr_trays, t in 1..T-1}:
 serve[t] = 1 and on_tray[i,t] - on_tray_non_gluten[i,t] = 0 and on_tray[i,t+1] - on_tray[i,t] = -1 ==> 
 on_tray_non_gluten[i,t+1] = on_tray_non_gluten[i,t] - 1;
+
+subject to ConstantSandwichOnOthersTrayOnlyGlutenSandwich {i in 1..nr_trays, t in 1..T-1}:
+serve[t] = 1 and on_tray[i,t+1] - on_tray[i,t] = 0 ==> 
+on_tray_non_gluten[i,t+1] = on_tray_non_gluten[i,t];
+
 
 #Children satisfaction constant when not serving anything
 subject to NotServingAnything {t in 1..T-1}:
@@ -308,3 +314,7 @@ and forall {c2 in 1..nr_children diff {c}} (satisfaction_children[c2,t+1] = sati
 subject to DecreaseOnTrayWhenDecreaseOnTrayNonGluten {i in 1..nr_trays, t in 1..T-1}:
 (serve_non_gluten[t] = 1) and (on_tray_non_gluten[i,t+1] - on_tray_non_gluten[i,t] = -1) ==>
 on_tray[i,t+1] - on_tray[i,t] = -1;
+
+subject to ConstantSandwichOnOthersTrayNonGlutenSandwich {i in 1..nr_trays, t in 1..T-1}:
+serve_non_gluten[t] = 1 and on_tray_non_gluten[i,t+1] - on_tray_non_gluten[i,t] = 0 ==> 
+on_tray[i,t+1] = on_tray[i,t];

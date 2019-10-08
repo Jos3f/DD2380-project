@@ -1,16 +1,16 @@
 
-param nr_children = 2;
+param nr_children = 3;
 param nr_places = 2;
-param child_pos = 1 2 2 2;
-param health_status = 1 0 2 0;
+param child_pos = 1 2 2 2 3 2;
+param health_status = 1 0 2 0 3 0;
 
-param init_b = 2;
+param init_b = 3;
 param init_b_non_gluten = 0;
 
-param init_content = 2;
+param init_content = 3;
 param init_content_non_gluten = 0;
 
 param nr_trays = 2;
 
-param T = 9;
+param T = 11;
 

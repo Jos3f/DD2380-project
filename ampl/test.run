@@ -1,7 +1,7 @@
 
 reset;
-model test2.mod;
-data test2.dat;
+model test.mod;
+data test.dat;
 
 display health_status;
 
