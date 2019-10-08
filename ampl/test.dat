@@ -1,8 +1,6 @@
-# Floortile problem
-# 1 robot, 1D
 
-param nr_chidlren := 2;
-param child_poss := 2 2;
+param nr_children := 2;
+param child_pos := 2 2;
 param health_status := 0 1;
 
 param init_b := 2;
