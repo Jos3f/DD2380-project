@@ -60,9 +60,8 @@ minimize objective: tstar;
 #Goal state
 subject to TotalSatisfaction:
 exists{t in 1..T} (sum{c in 1..nr_children} (satisfaction_children[c,t]) = nr_children and t = tstar);
-#exists{t in 1..T} pos_tray[2, t] = 2 and on_tray[2, t] = 1 and
-#on_tray[1, t] = 1 and pos_tray[1, t] = 2 and satisfaction_children[1, t] = 1 and 
-#satisfaction_children[2, t] = 1 and t = tstar;
+#exists{t in 1..T} on_tray_non_gluten[1, t] = 2 and pos_tray[1, t] = 2
+#and t = tstar;
 
 # Max one action each time step
 subject to OneAction {t in 1..T-1}:
@@ -159,7 +158,6 @@ sandwich_in_kitchen[t+1] = sandwich_in_kitchen[t] + 1 and sandwich_in_kitchen_no
 
 
 # Put sandwich on tray
-
 subject to MustHaveSandwichToPutOnTray{t in 1..T-1}:
 sandwich_in_kitchen[t] = 0 ==>
 put_on_tray[t] = 0;
@@ -174,6 +172,8 @@ put_on_tray[t] = 1 and sandwich_in_kitchen[t] - sandwich_in_kitchen_non_gluten[t
 sandwich_in_kitchen_non_gluten[t+1] = sandwich_in_kitchen_non_gluten[t] - 1 and
 sandwich_in_kitchen[t+1] = sandwich_in_kitchen[t] - 1;
 
+
+
 subject to MustDecreaseKitchenAfterPutOnTray{t in 1..T-1}:
 put_on_tray[t] = 1 and sandwich_in_kitchen[t] - sandwich_in_kitchen_non_gluten[t] > 0 ==>
 sandwich_in_kitchen[t+1] = sandwich_in_kitchen[t] - 1 and
@@ -185,6 +185,14 @@ sandwich_in_kitchen_non_gluten[t+1] = sandwich_in_kitchen_non_gluten[t] - 1 and
 sandwich_in_kitchen[t+1] = sandwich_in_kitchen[t] - 1;
 
 
+subject to TraysCannotIncreaseMoreThanOneStep {i in 1..nr_trays, t in 1..T-1}:
+put_on_tray[t] = 1 or put_on_tray_non_gluten[t] = 1 ==>
+on_tray[i, t+1] - on_tray[i, t] <= 1 and on_tray_non_gluten[i, t+1] - on_tray_non_gluten[i, t] <= 1;
+
+subject to SandwichInKitchenCannotChangeMoreThanOneStep {t in 1..T-1}:
+put_on_tray[t] = 1 or put_on_tray_non_gluten[t] = 1 ==>
+sandwich_in_kitchen_non_gluten[t+1] - sandwich_in_kitchen_non_gluten[t] <= 0 and
+sandwich_in_kitchen[t+1] - sandwich_in_kitchen[t] <= 0;
 
 
 subject to PutOnOneTrayExcessiveSandwich {i in 1..nr_trays, t in 1..T-1}:
@@ -214,7 +222,8 @@ on_tray[i, t+1] - on_tray[i, t] = 1;
 subject to DontIncreaseTotalTrayWhenNotIncreasingNonGlutenTray {i in 1..nr_trays, t in 1..T-1}:
 #put_on_tray[t] = 1 and on_tray_non_gluten[i, t+1] - on_tray_non_gluten[i,t] = 0 ==>
 on_tray_non_gluten[i, t+1] - on_tray_non_gluten[i,t] = 1 ==>
-on_tray[i, t+1] - on_tray[i, t] = 1;
+on_tray[i, t+1] - on_tray[i, t] = 1 and 
+forall {j in 1..nr_trays diff {i}} (on_tray[j,t+1] = on_tray[j,t]);
 
 #All onTrays Unchanged case
 subject to NotPuttingOnAnyTrayAndNotServingAnything {i in 1..nr_trays, t in 1..T-1}:
