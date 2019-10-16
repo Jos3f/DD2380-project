@@ -46,7 +46,7 @@ def main():
 
 
     NUM_CHILDREN = 3
-    ALLERGIC_DIVISOR = 3
+    ALLERGIC_DIVISOR = 3 # Means one in ALLERGIC_DIVISOR kids are allergic
     BREAD_AND_CONTENT_GLUTEN_DIVISOR = ALLERGIC_DIVISOR
     NUM_TRAYS = NUM_CHILDREN // 3
     NUM_TABLES = NUM_CHILDREN // 3
@@ -78,7 +78,7 @@ def main():
 
     # Create Table
     for id in range(1, NUM_TABLES + 1):
-        tables.append(Table(id))
+        tables.append(Table(id + 1))
 
     # Create children
     for id in range(1, NUM_CHILDREN + 1):
@@ -108,27 +108,28 @@ def main():
 
 
     '''Build the output string'''
-    output_string += "param nr_children := " + str(NUM_CHILDREN) + ";\n"
+    output_string += "param nr_children = " + str(NUM_CHILDREN) + ";\n"
+    output_string += "param nr_places = " + str(NUM_TABLES + 1) + ";\n"
 
-    output_string += "param child_pos :="
-    for child in children:
-        output_string += " " + str(child.table.id)
+    output_string += "param child_pos ="
+    for index,child in enumerate(children):
+        output_string += " " + str(index + 1) + " " + str(child.table.id)
     output_string += ";\n"
 
-    output_string += "param health_status :="
-    for child in children:
-        output_string += " " + str(1 if child.gluten_allergic else 0)
+    output_string += "param health_status ="
+    for index,child in enumerate(children):
+        output_string += " " + str(index + 1) + " " + str(1 if child.gluten_allergic else 0)
     output_string += ";\n\n"
 
-    output_string += "param init_bread := " + str(NUM_BREADS_AND_CONTENT) + ";\n"
-    output_string += "param init_bread_non_gluten := " + str(NUM_BREADS_AND_CONTENT // BREAD_AND_CONTENT_GLUTEN_DIVISOR) + ";\n\n"
+    output_string += "param init_b = " + str(NUM_BREADS_AND_CONTENT) + ";\n"
+    output_string += "param init_b_non_gluten = " + str(NUM_BREADS_AND_CONTENT // BREAD_AND_CONTENT_GLUTEN_DIVISOR) + ";\n\n"
 
-    output_string += "param init_content := " + str(NUM_BREADS_AND_CONTENT) + ";\n"
-    output_string += "param init_content_non_gluten := " + str(NUM_BREADS_AND_CONTENT // BREAD_AND_CONTENT_GLUTEN_DIVISOR) + ";\n\n"
+    output_string += "param init_content = " + str(NUM_BREADS_AND_CONTENT) + ";\n"
+    output_string += "param init_content_non_gluten = " + str(NUM_BREADS_AND_CONTENT // BREAD_AND_CONTENT_GLUTEN_DIVISOR) + ";\n\n"
 
-    output_string += "param nr_trays := " + str(NUM_TRAYS) + ";\n\n"
+    output_string += "param nr_trays = " + str(NUM_TRAYS) + ";\n\n"
 
-    output_string += "T := " + str(NUM_TIMESTEPS) + ";"
+    output_string += "T = " + str(NUM_TIMESTEPS) + ";"
 
 
     '''Print to terminal'''
