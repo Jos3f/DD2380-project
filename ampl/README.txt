@@ -15,3 +15,5 @@ How to run:
 * Send "child-snack.run" to AMPL
 
 * Don't forget to reset the console after each run. 
+
+This folder also holds a file called generate-instances.py. This can be used for generating instances that can be run with our model. It works similarly to the pddl instance generator. Open the file in text editor for more information. Initial parameters can be found in the main function of the script. Tested with python.
