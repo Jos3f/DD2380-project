@@ -1,0 +1,16 @@
+
+# File for initialization of a scenario
+
+param nr_children = 2; # Total number of children
+param nr_places = 3; # Number of places. index 1 is reserved for kitchen. The rest are tables.
+param child_pos = 1 2 2 3; # The place (table) each children sits at
+param health_status = 1 0 2 0; # Health status of a child. 0 is healthy and 1 is equal to allergic to gluten
+
+param init_b = 2; # Initial number of total number of bread
+param init_b_non_gluten = 0; # Initial number of gluten free bread
+param init_content = 2; # Initial number of total number of content
+param init_content_non_gluten = 0; # Initial number of gluten free bread
+
+param nr_trays = 2; # Number of trays in scenario
+
+param T = 10; # Upper bound for number of moves/time steps. This is the objctive that we want to minimize.
