@@ -1,5 +1,13 @@
-# Author: Josef Haddad
-# Use case: AI - Course DD2380 
+'''
+ Author: Josef Haddad
+ Use case: AI - Course DD2380 project.
+ What it does: Generate start instances for the child-snack planning problem
+
+ How to run: Use python 3 (Tested on python 3.6.4)
+
+ There are parameters at the beginning of the main function that you can change depending on how you want your intance to be like.
+ The script will create a file and store it in the pddl subdirectory where the name is the time stamp it was created on.
+'''
 
 from __future__ import print_function
 import sys
@@ -32,7 +40,8 @@ class Child:
 
 
 class Bread:
-    """docstring for Bread."""
+    """Bread and gluten info."""
+
     def nameString(self):
         return "bread" + str(self.id)
 
@@ -47,7 +56,7 @@ class Bread:
 
 
 class Content:
-    """docstring for Content."""
+    """Content and gluten info"""
     def nameString(self):
         return "content" + str(self.id)
 
@@ -62,20 +71,19 @@ class Content:
 
 
 class Tray:
-    """docstring for Tray."""
+    """Tray"""
     def nameString(self):
         return "tray" + str(self.id)
 
     def initString(self):
         return "(at tray" + str(self.id) + " kitchen)"
 
-
     def __init__(self, id):
         self.id = id
 
 
 class Table:
-    """docstring for Table."""
+    """Table"""
     def nameString(self):
         return "table" + str(self.id)
 
@@ -84,19 +92,19 @@ class Table:
 
 
 class Sandwich:
-    """docstring for Sandwich."""
+    """Sandwich"""
     def nameString(self):
         return "sandw" + str(self.id)
 
     def initString(self):
         return "(notexist sandw" + str(self.id) + ")"
 
-
     def __init__(self, id):
         self.id = id
 
 
 def stringOfObjects(name, objects):
+    '''Function for taking a list of objects, prints their names and adds their object type name afterwards.'''
     str = ""
     for object in objects:
         str += object.nameString() + " "
@@ -105,23 +113,29 @@ def stringOfObjects(name, objects):
 
 
 def stringOfInits(name, objects):
+    ''' Creates a string of initial coditions for the objects in the array'''
     str = ""
     for object in objects:
         str += "\t\t" + object.initString() + "\n"
     return str
 
+
 def main():
-    NUM_CHILDREN = 10
-    ALLERGIC_FACTOR = 0.3
-    NUM_BREADS_AND_CONTENT = 10
-    BREAD_AND_CONTENT_GLUTEN_FACTOR = 0.3
-    NUM_TRAYS = 3
-    NUM_TABLES = 3
-    NUM_SANDWICHES = 13
-    SEED = 1337
+    ''' Main function. This will build the string that represents the instance in pddl format.'''
+
+    ''' Parameters for the instance'''
+    NUM_CHILDREN = 10 # Number of children.
+    ALLERGIC_FACTOR = 0.3 # Factor allergic children.
+    NUM_BREADS_AND_CONTENT = 10 # Number of bread and content.
+    BREAD_AND_CONTENT_GLUTEN_FACTOR = 0.3 # Factor gluten free bread and content
+    NUM_TRAYS = 3 # Number of trays
+    NUM_TABLES = 3 # Number of tables
+    NUM_SANDWICHES = 13 # Number of sandwiches
+    SEED = 1337 # Seed for random generator
     random.seed(SEED)
 
 
+    ''' Start building on the output string '''
     output_string = ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n;; Variable initialization: \n"
     output_string += ";; NUM_CHILDREN = " + str(NUM_CHILDREN) + "\n"
     output_string += ";; ALLERGIC_FACTOR = " + str(ALLERGIC_FACTOR) + "\n"
@@ -133,7 +147,7 @@ def main():
     output_string += ";; SEED = " + str(SEED) + "\n"
     output_string += ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n\n\n"
 
-
+    ''' Build scenario as combination of objects and store them in arrays'''
     children = []
     breads = []
     contents = []
@@ -141,7 +155,7 @@ def main():
     tables = []
     sandwiches = []
 
-    # Create Table
+    # Create Tables
     for id in range(1, NUM_TABLES + 1):
         tables.append(Table(id))
 
@@ -187,6 +201,7 @@ def main():
     output_string += "\t)\n"
 
     output_string += "\t(:init\n"
+
     # add initial conditions here
     for object_name, objects in object_pairs.items():
         try:
@@ -198,11 +213,9 @@ def main():
     # End of init
     output_string += "\t)\n"
 
+    # Goal condition
     output_string += "\t(:goal\n"
     output_string += "\t\t(and\n"
-
-
-
     for child in children:
         output_string += "\t\t\t" + child.goalString() + "\n"
 
@@ -220,8 +233,6 @@ def main():
     file = open(completeName, "w")
     file.write(output_string)
     file.close()
-
-
 
 if __name__ == "__main__":
     main()
