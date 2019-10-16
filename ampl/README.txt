@@ -10,7 +10,7 @@ How to run:
 
 * Send "child-snack.mod" to AMPL (right click on the file and select that option)
 
-* Send "child-snack.det" to AMPL 
+* Send "child-snack.dat" to AMPL 
 
 * Send "child-snack.run" to AMPL
 
