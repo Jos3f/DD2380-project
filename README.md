@@ -1,5 +1,5 @@
 # DD2380 Artificial Intelligence Project
-Final project (for grade A) from the master course in Artificial Intelligence on KTH, fall 2019
+Final project (for grade A) from the master course in Artificial Intelligence on KTH, fall 2019. <br/>
 The child snack planning problem (stated below) were formulated and solved with two different approaches Logical optimization & PDDL.
 
 ## Child Snack Problem Formulation
