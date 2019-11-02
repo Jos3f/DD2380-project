@@ -1,6 +1,6 @@
 # DD2380 Artificial Intelligence Project
 Final project (for grade A) from the master course in Artificial Intelligence on KTH, fall 2019. <br/>
-The child snack planning problem (stated below) were formulated and solved with two different approaches Logical optimization & PDDL.
+The child snack planning problem (stated below) was formulated and solved with two different approaches: Logical optimization & PDDL.
 
 ## Child Snack Problem Formulation
 “The task is to plan how to make and serve sandwiches for a group of children in which some are allergic to gluten. There are two actions for making sandwiches from their ingredients. The first one makes a sandwich and the second one makes a sandwich taking into account that all ingredients are gluten-free. There are also actions to put a sandwich on a tray and to serve sandwiches.
